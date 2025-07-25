@@ -25,6 +25,12 @@ public class Lists {
     @Column(name = "board_id")
     private Integer boardId;
 
+    @Column(name = "member_id", nullable = false)
+    private Integer memberId;
+
+    public Integer getMemberId() { return memberId; }
+    public void setMemberId(Integer memberId) { this.memberId = memberId; }
+
     // Constructors
     public Lists() {
     }

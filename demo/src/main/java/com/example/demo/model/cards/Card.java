@@ -1,11 +1,11 @@
 package com.example.demo.model.cards;
 
 import jakarta.persistence.*;
-import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
-@Table(name = "cards", schema = "public")
-public class Cards {
+@Table(name = "cards")
+public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,16 +19,19 @@ public class Cards {
     private String description;
 
     @Column(name = "ending_date")
-    private Date endingDate;
+    private LocalDate endingDate;
 
     @Column(name = "list_id", nullable = false)
     private Integer listId;
 
     @Column(name = "position", nullable = false)
-    private Integer position = 0;  // Varsayılan değer
+    private Integer position;
 
+    @Column(name = "member_id", nullable = false)
+    private Integer memberId;
 
     // Getters and Setters
+
     public Integer getCardId() {
         return cardId;
     }
@@ -53,11 +56,11 @@ public class Cards {
         this.description = description;
     }
 
-    public Date getEndingDate() {
+    public LocalDate getEndingDate() {
         return endingDate;
     }
 
-    public void setEndingDate(Date endingDate) {
+    public void setEndingDate(LocalDate endingDate) {
         this.endingDate = endingDate;
     }
 
@@ -69,12 +72,19 @@ public class Cards {
         this.listId = listId;
     }
 
-    // Position için getter ve setter
     public Integer getPosition() {
         return position;
     }
 
     public void setPosition(Integer position) {
         this.position = position;
-}
+    }
+
+    public Integer getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Integer memberId) {
+        this.memberId = memberId;
+   }
 }

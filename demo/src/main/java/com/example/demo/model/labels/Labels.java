@@ -19,6 +19,12 @@ public class Labels {
     @Column(name = "color", length = 10, nullable = false)
     private String color;
 
+    @Column(name = "member_id", nullable = false)
+    private Integer memberId;
+
+    public Integer getMemberId() { return memberId; }
+    public void setMemberId(Integer memberId) { this.memberId = memberId; } 
+
     // Getter ve Setter'lar
     public Integer getLabelId() { return labelId; }
     public void setLabelId(Integer labelId) { this.labelId = labelId; }

@@ -16,7 +16,13 @@ public class Card_Labels {
 
     @Column(name = "label_id", nullable = false)
     private Integer labelId;
+  
+    @Column(name = "member_id", nullable = false)
+    private Integer memberId;
 
+    public Integer getMemberId() { return memberId; }
+    public void setMemberId(Integer memberId) { this.memberId = memberId; }
+    
     // Getters and Setters
     public Integer getCardLabelId() {
         return cardLabelId;

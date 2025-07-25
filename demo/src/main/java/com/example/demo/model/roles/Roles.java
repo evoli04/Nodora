@@ -1,5 +1,6 @@
 package com.example.demo.model.roles;
 
+import java.io.Serializable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,8 +8,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+
 @Entity
-@Table(name = "roles")
+@Table(name = "role")
 public class Roles {
 
     @Id
@@ -16,14 +18,22 @@ public class Roles {
     @Column(name = "role_id")
     private Integer roleId;
 
-    @Column(name = "role_name", nullable = false, length = 10)
+    @Column(name = "role_name", length = 10, nullable = false)
     private String roleName;
 
-    @Column(name = "scope", length = 10)
+    @Column(name = "scope", length = 10, nullable = false)
     private String scope;
 
-    // Getter ve Setter'lar
+    // Constructors
+    public Roles() {
+    }
 
+    public Roles(String roleName, String scope) {
+        this.roleName = roleName;
+        this.scope = scope;
+    }
+
+    // Getters and Setters
     public Integer getRoleId() {
         return roleId;
     }
@@ -45,6 +55,15 @@ public class Roles {
     }
 
     public void setScope(String scope) {
-        this.scope =scope;
+        this.scope = scope;
+    }
+
+    // toString method
+    @Override
+    public String toString() {
+        return "Role{" +
+                "roleId=" + roleId +
+                ", roleName='" + roleName + '\'' +
+                ", scope='" + scope + '\'' + '}';
 }
 }

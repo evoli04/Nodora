@@ -1,11 +1,6 @@
 package com.example.demo.model.members;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "members")
@@ -25,13 +20,18 @@ public class Member {
     @Column(name = "email", length = 30, unique = true)
     private String email;
 
-    @Column(name = "password", length = 15)
+    @Column(name = "password", length = 70)
     private String password;
 
-    @Column(name = "is_admin") // Tabloda is_admin olarak tanımlı
-    private Boolean isAdmin;
+    //@Column(name = "role_id")
+    //private Integer roleId;
+    @Column(name = "is_admin", nullable = false)
+    private boolean isAdmin;
 
-    @Column(name = "membername", length = 20) // Tabloda membername olarak tanımlı
+    public boolean getIsAdmin() { return isAdmin; }
+    public void setIsAdmin(boolean isAdmin) { this.isAdmin = isAdmin; }
+
+    @Column(name = "membername", length = 20)
     private String memberName;
 
     // No-args constructor
@@ -40,13 +40,13 @@ public class Member {
 
     // All-args constructor
     public Member(Integer memberId, String name, String surname, String email,
-                  String password, Boolean isAdmin, String memberName) {
+                  String password, String memberName) {
         this.memberId = memberId;
         this.name = name;
         this.surname = surname;
         this.email = email;
         this.password = password;
-        this.isAdmin = isAdmin;
+        //this.roleId = roleId;
         this.memberName = memberName;
     }
 
@@ -89,14 +89,6 @@ public class Member {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Boolean getIsAdmin() {
-        return isAdmin;
-    }
-
-    public void setIsAdmin(Boolean isAdmin) {
-        this.isAdmin = isAdmin;
     }
 
     public String getMemberName() {

@@ -9,56 +9,56 @@ public class Workspaces {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "workspace_id")
-    private Integer workspace_id;
+    private Integer workspaceId;
 
     @Column(name = "member_id", nullable = false)
-    private Integer member_id;
+    private Integer memberId;
 
     @Column(name = "workspace_name", length = 20, nullable = false)
-    private String workspace_name;
+    private String workspaceName;
 
     // Boş constructor (zorunlu)
     public Workspaces() {}
 
     // Parametreli constructor (isteğe bağlı)
-    public Workspaces(Integer member_id, String workspace_name) {
-        this.member_id = member_id;
-        this.workspace_name = workspace_name;
+    public Workspaces(Integer memberId, String workspaceName) {
+        this.memberId = memberId;
+        this.workspaceName = workspaceName;
     }
 
     // Getter ve Setter'lar
 
-    public Integer getWorkspace_id() {
-        return workspace_id;
+    public Integer getWorkspaceId() {
+        return workspaceId;
     }
 
-    public void setWorkspace_id(Integer workspace_id) {
-        this.workspace_id = workspace_id;
+    public void setWorkspaceId(Integer workspaceId) {
+        this.workspaceId = workspaceId;
     }
 
-    public Integer getMember_id() {
-        return member_id;
+    public Integer getMemberId() {
+        return memberId;
     }
 
-    public void setMember_id(Integer member_id) {
-        this.member_id = member_id;
+    public void setMemberId(Integer memberId) {
+        this.memberId = memberId;
     }
 
-    public String getWorkspace_name() {
-        return workspace_name;
+    public String getWorkspaceName() {
+        return workspaceName;
     }
 
-    public void setWorkspace_name(String workspace_name) {
-        this.workspace_name = workspace_name;
+    public void setWorkspaceName(String workspaceName) {
+        this.workspaceName = workspaceName;
     }
 
     // toString (isteğe bağlı)
     @Override
     public String toString() {
         return "Workspaces{" +
-                "workspace_id=" + workspace_id +
-                ", member_id=" + member_id +
-                ", workspace_name='" + workspace_name + '\'' +
-            '}';
-}
+                "workspaceId=" + workspaceId +
+                ", memberId=" + memberId +
+                ", workspaceName='" + workspaceName + '\'' +
+                '}';
+    }
 }
