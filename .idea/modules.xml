@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/demo/demo.iml" filepath="$PROJECT_DIR$/demo/demo.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/nodora.iml" filepath="$PROJECT_DIR$/.idea/nodora.iml" />
+<<<<<<< HEAD
+            <module fileurl="file://$PROJECT_DIR$/.idea/Nodora-test2.iml" filepath="$PROJECT_DIR$/.idea/Nodora-test2.iml" />
+>>>>>>> 046da8e (backend son hali)
     </modules>
   </component>
 </project>
