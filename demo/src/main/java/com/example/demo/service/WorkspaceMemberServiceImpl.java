@@ -2,16 +2,16 @@ package com.example.demo.service;
 
 import com.example.demo.dto.request.WorkspaceMemberRequest;
 import com.example.demo.dto.response.WorkspaceMemberResponse;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.members.Member;
 import com.example.demo.model.roles.Roles;
 import com.example.demo.model.workspace_members.WorkspaceMember;
 import com.example.demo.model.workspaces.Workspaces;
 import com.example.demo.repository.MemberRepository;
 import com.example.demo.repository.RoleRepository;
-import com.example.demo.repository.WorkspaceRepository;
 import com.example.demo.repository.WorkspaceMemberRepository;
-import lombok.RequiredArgsConstructor;
+import com.example.demo.repository.WorkspaceRepository;
+import com.example.demo.service.WorkspaceMemberService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,93 +19,89 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class WorkspaceMemberServiceImpl implements WorkspaceMemberService {
 
-    private final WorkspaceMemberRepository workspaceMemberRepository;
-    private final WorkspaceRepository workspaceRepository;
-    private final MemberRepository memberRepository;
-    private final RoleRepository roleRepository;
+    @Autowired
+    private WorkspaceMemberRepository workspaceMemberRepository;
+
+    @Autowired
+    private WorkspaceRepository workspaceRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public WorkspaceMemberResponse addMember(WorkspaceMemberRequest request) {
         Workspaces workspace = workspaceRepository.findById(request.getWorkspaceId())
-                .orElseThrow(() -> new ResourceNotFoundException("Workspace bulunamadı"));
+                .orElseThrow(() -> new RuntimeException("Workspace not found"));
 
-        Member member = memberRepository.findById(request.getMemberId())
-                .orElseThrow(() -> new ResourceNotFoundException("Üye bulunamadı"));
+        Member member = memberRepository.findByEmail(request.getMemberEmail())
+                .orElseThrow(() -> new RuntimeException("Member with email not found"));
 
         Roles role = roleRepository.findById(request.getRoleId())
-                .orElseThrow(() -> new ResourceNotFoundException("Rol bulunamadı"));
+                .orElseThrow(() -> new RuntimeException("Role not found"));
 
-        WorkspaceMember wm = new WorkspaceMember();
-        wm.setWorkspace(workspace);
-        wm.setMember(member);
-        wm.setRole(role);
-        wm.setCreatedAt(LocalDateTime.now());
+        WorkspaceMember memberEntity = new WorkspaceMember();
+        memberEntity.setWorkspace(workspace);
+        memberEntity.setMember(member);
+        memberEntity.setRole(role);
+        memberEntity.setCreatedAt(LocalDateTime.now());
 
-        WorkspaceMember saved = workspaceMemberRepository.save(wm);
+        WorkspaceMember saved = workspaceMemberRepository.save(memberEntity);
 
-        return convertToResponse(saved);
+        return toResponse(saved);
     }
 
-    /* @Override
-     public List<WorkspaceMemberResponse> getMembersByWorkspaceId(Integer workspaceId) {
-         // Burada repository’deki methodu kullandık:
-         List<WorkspaceMember> members = workspaceMemberRepository.findByWorkspace_Id(workspaceId);
-         return members.stream()
-                 .map(this::convertToResponse)
-                 .collect(Collectors.toList());
-     }  */
     @Override
     public List<WorkspaceMemberResponse> getMembersByWorkspaceId(Integer workspaceId) {
-        List<WorkspaceMember> members = workspaceMemberRepository.findByWorkspace_WorkspaceId(workspaceId);
-        return members.stream()
-                .map(this::convertToResponse)
+        return workspaceMemberRepository.findByWorkspace_WorkspaceId(workspaceId)
+                .stream()
+                .map(this::toResponse)
                 .collect(Collectors.toList());
     }
 
-
     @Override
     public WorkspaceMemberResponse updateMemberRole(Integer workspaceMemberId, Integer newRoleId) {
-        WorkspaceMember wm = workspaceMemberRepository.findById(workspaceMemberId)
-                .orElseThrow(() -> new ResourceNotFoundException("Workspace üyesi bulunamadı"));
+        WorkspaceMember member = workspaceMemberRepository.findById(workspaceMemberId)
+                .orElseThrow(() -> new RuntimeException("Member not found"));
 
         Roles role = roleRepository.findById(newRoleId)
-                .orElseThrow(() -> new ResourceNotFoundException("Rol bulunamadı"));
+                .orElseThrow(() -> new RuntimeException("Role not found"));
 
-        wm.setRole(role);
-        WorkspaceMember updated = workspaceMemberRepository.save(wm);
+        member.setRole(role);
+        WorkspaceMember updated = workspaceMemberRepository.save(member);
 
-        return convertToResponse(updated);
+        return toResponse(updated);
     }
 
     @Override
     public void removeMember(Integer workspaceMemberId) {
-        WorkspaceMember wm = workspaceMemberRepository.findById(workspaceMemberId)
-                .orElseThrow(() -> new ResourceNotFoundException("Workspace üyesi bulunamadı"));
-        workspaceMemberRepository.delete(wm);
+        workspaceMemberRepository.deleteById(workspaceMemberId);
     }
 
-    private WorkspaceMemberResponse convertToResponse(WorkspaceMember wm) {
-        WorkspaceMemberResponse response = new WorkspaceMemberResponse();
-        response.setWorkspaceMemberId(wm.getId()); // workspace member id
-
-        // Workspaces entity id getter'ı bilmiyoruz, varsayalım workspaceId:
-        response.setWorkspaceId(wm.getWorkspace().getWorkspaceId());
-
-        response.setMemberId(wm.getMember().getMemberId());
-        response.setRoleId(wm.getRole().getRoleId());
-        return response;
-    }
     @Override
     public List<WorkspaceMemberResponse> getWorkspacesByMemberId(Integer memberId) {
-        List<WorkspaceMember> members = workspaceMemberRepository.findByMember_MemberId(memberId);
-        return members.stream()
-                .map(this::convertToResponse)
+        return workspaceMemberRepository.findByMember_MemberId(memberId)
+                .stream()
+                .map(this::toResponse)
                 .collect(Collectors.toList());
     }
 
-
+    private WorkspaceMemberResponse toResponse(WorkspaceMember member) {
+        WorkspaceMemberResponse response = new WorkspaceMemberResponse();
+        response.setWorkspaceMemberId(member.getId());
+        response.setWorkspaceId(member.getWorkspace().getWorkspaceId());
+        response.setWorkspaceName(member.getWorkspace().getWorkspaceName());
+        response.setMemberId(member.getMember().getMemberId());
+        response.setMemberName(member.getMember().getMemberName());
+        response.setMemberEmail(member.getMember().getEmail());
+        response.setRoleId(member.getRole().getRoleId());
+        response.setRoleName(member.getRole().getRoleName());
+        response.setCreatedAt(member.getCreatedAt());
+        return response;
+    }
 
 }

@@ -32,6 +32,8 @@ public class LabelsServiceImpl implements LabelsService {
         label.setBoardId(board.getBoardId());
         label.setLabelName(request.getLabelName());
         label.setColor(request.getColor());
+        label.setMemberId(request.getMemberId());
+
 
         Labels saved = labelsRepository.save(label);
 
@@ -67,5 +69,5 @@ public class LabelsServiceImpl implements LabelsService {
         response.setLabelName(label.getLabelName());
         response.setColor(label.getColor());
         return response;
-}
+    }
 }

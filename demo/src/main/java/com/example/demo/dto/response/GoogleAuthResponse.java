@@ -12,6 +12,7 @@ public class GoogleAuthResponse {
     private Integer roleId;
     private Integer memberId;
     private String message;
+    private String email;
     private boolean isNewUser;
     
     public GoogleAuthResponse(String token, Integer roleId, boolean isNewUser) {
@@ -21,11 +22,12 @@ public class GoogleAuthResponse {
         this.message = isNewUser ? "Google ile başarıyla kayıt oldunuz" : "Google ile başarıyla giriş yaptınız";
     }
     
-    public GoogleAuthResponse(String token, Integer roleId, Integer memberId, boolean isNewUser) {
+    public GoogleAuthResponse(String token, Integer roleId, Integer memberId,String email, boolean isNewUser) {
         this.token = token;
         this.roleId = roleId;
         this.memberId = memberId;
         this.isNewUser = isNewUser;
+        this.email=email;
         this.message = isNewUser ? "Google ile başarıyla kayıt oldunuz" : "Google ile başarıyla giriş yaptınız";
     }
 } 

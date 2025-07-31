@@ -9,31 +9,38 @@ import com.example.demo.repository.WorkspaceMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Service
 public class BoardMemberServiceImpl implements BoardMemberService {
+
     @Autowired
     private BoardMemberRepository boardMemberRepository;
+
     @Autowired
     private BoardRepository boardRepository;
+
     @Autowired
     private WorkspaceMemberRepository workspaceMemberRepository;
+
+    @Autowired
+    private BoardService boardService; // BoardService eklendi
 
     @Override
     @Transactional
     public void addMemberToBoard(Integer boardId, Integer workspaceId, Integer memberId, Integer requesterId) {
         // Sadece board lideri ekleyebilir
         BoardMember requester = boardMemberRepository.findByBoard_BoardIdAndMember_MemberId(boardId, requesterId)
-            .orElseThrow(() -> new RuntimeException("İsteği yapan board üyesi değil!"));
+                .orElseThrow(() -> new RuntimeException("İsteği yapan board üyesi değil!"));
         if (requester.getRoleId() != 3) {
             throw new RuntimeException("Sadece board lideri üye ekleyebilir!");
         }
         WorkspaceMember workspaceMember = workspaceMemberRepository
-            .findByWorkspace_WorkspaceIdAndMember_MemberId(workspaceId, memberId)
-            .orElseThrow(() -> new RuntimeException("Bu üye workspace'e ait değil!"));
+                .findByWorkspace_WorkspaceIdAndMember_MemberId(workspaceId, memberId)
+                .orElseThrow(() -> new RuntimeException("Bu üye workspace'e ait değil!"));
         Boards board = boardRepository.findById(boardId)
-            .orElseThrow(() -> new RuntimeException("Board bulunamadı!"));
+                .orElseThrow(() -> new RuntimeException("Board bulunamadı!"));
         if (boardMemberRepository.existsByBoard_BoardIdAndMember_MemberId(boardId, memberId)) {
             throw new RuntimeException("Bu üye zaten board üyesi!");
         }
@@ -44,12 +51,11 @@ public class BoardMemberServiceImpl implements BoardMemberService {
         boardMember.setRoleId(5); // member
         boardMemberRepository.save(boardMember);
     }
-
     @Override
+    @Transactional
     public void removeMemberFromBoard(Integer boardId, Integer memberId, Integer requesterId) {
-        // Sadece board lideri çıkarabilir
         BoardMember requester = boardMemberRepository.findByBoard_BoardIdAndMember_MemberId(boardId, requesterId)
-            .orElseThrow(() -> new RuntimeException("İsteği yapan board üyesi değil!"));
+                .orElseThrow(() -> new RuntimeException("İsteği yapan board üyesi değil!"));
         if (requester.getRoleId() != 3) {
             throw new RuntimeException("Sadece board lideri üye çıkarabilir!");
         }
@@ -64,16 +70,7 @@ public class BoardMemberServiceImpl implements BoardMemberService {
     @Override
     @Transactional
     public void promoteToLeader(Integer boardId, Integer memberId, Integer requesterId) {
-        // Sadece owner (2) veya mevcut lider (3) atama yapabilir
-        BoardMember requester = boardMemberRepository.findByBoard_BoardIdAndMember_MemberId(boardId, requesterId)
-            .orElseThrow(() -> new RuntimeException("İsteği yapan board üyesi değil!"));
-        int role = requester.getRoleId();
-        if (role != 2 && role != 3) {
-            throw new RuntimeException("Sadece owner veya mevcut lider lider atayabilir!");
-        }
-        // Önce mevcut lideri member yap
-        boardMemberRepository.demotePreviousLeader(boardId);
-        // Sonra yeni lideri ata
-        boardMemberRepository.promoteToLeader(boardId, memberId);
+        // Yetkiyi doğrudan BoardService'e devrediyoruz
+        boardService.promoteLeader(boardId, memberId, requesterId);
     }
-} 
+}

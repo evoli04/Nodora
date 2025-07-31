@@ -105,9 +105,10 @@ public class JwtAuthenticationFilter implements Filter {
      */
     private boolean isPublicEndpoint(String requestPath) {
         return requestPath.startsWith("/api/auth/") ||
-               requestPath.startsWith("/swagger-ui/") ||
-               requestPath.startsWith("/v3/api-docs/") ||
-               requestPath.startsWith("/swagger-resources/") ||
-               requestPath.startsWith("/webjars/");
+               requestPath.startsWith("/swagger-ui") ||
+               requestPath.startsWith("/v3/api-docs") ||
+               requestPath.startsWith("/swagger-resources") ||
+               requestPath.startsWith("/webjars") ||
+               requestPath.equals("/swagger-ui.html");
     }
 }

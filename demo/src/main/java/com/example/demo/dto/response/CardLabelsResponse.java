@@ -5,6 +5,8 @@ public class CardLabelsResponse {
     private Integer labelId;
     private Integer cardId;
     private Integer memberId;
+    private String cardLabelName;
+
 
     public Integer getCardLabelId() {
         return cardLabelId;
@@ -36,5 +38,13 @@ public class CardLabelsResponse {
 
     public void setMemberId(Integer memberId) {
         this.memberId = memberId;
-}
+    }
+
+    public String getCardLabelName() {
+        return cardLabelName;
+    }
+
+    public void setCardLabelName(String cardLabelName) {
+        this.cardLabelName = cardLabelName;
+    }
 }

@@ -1,25 +1,38 @@
 package com.example.demo.dto.request;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class WorkspaceMemberRequest {
-
-    @NotNull(message = "Workspace ID boş olamaz")
-    @Positive(message = "Workspace ID pozitif olmalı")
     private Integer workspaceId;
-
-    @NotNull(message = "Member ID boş olamaz")
-    @Positive(message = "Member ID pozitif olmalı")
-    private Integer memberId;
-
-    @NotNull(message = "Role ID boş olamaz")
-    @Positive(message = "Role ID pozitif olmalı")
+    private String memberEmail; // Davet edilen kişinin e-postası
     private Integer roleId;
+
+    public WorkspaceMemberRequest(Integer workspaceId, Integer memberId, Integer roleId) {
+        this.workspaceId = workspaceId;
+        this.memberEmail = memberEmail;
+        this.roleId = roleId;
+    }
+
+
+    public Integer getWorkspaceId() {
+        return workspaceId;
+    }
+
+    public void setWorkspaceId(Integer workspaceId) {
+        this.workspaceId = workspaceId;
+    }
+
+    public String getMemberEmail() {
+        return memberEmail;
+    }
+
+    public void setMemberEmail(String memberEmail) {
+        this.memberEmail = memberEmail;
+    }
+
+    public Integer getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
+    }
 }

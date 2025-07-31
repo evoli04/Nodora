@@ -22,7 +22,7 @@ public class GoogleAuthServiceImpl implements GoogleAuthService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
-    
+
     @Value("${google.oauth.client.id}")
     private String googleClientId;
 
@@ -32,12 +32,12 @@ public class GoogleAuthServiceImpl implements GoogleAuthService {
             log.info("Google OAuth authentication başlatılıyor");
             log.info("Request ID Token: {}", request.getIdToken());
             log.info("Request Access Token: {}", request.getAccessToken());
-            
+
             // Test için basit bir email kullan
             String email = "test@google.com";
             String givenName = "Google";
             String familyName = "User";
-            
+
             log.info("Test kullanıcı bilgileri: {}", email);
 
             // Kullanıcı veritabanında var mı kontrol et
@@ -59,7 +59,7 @@ public class GoogleAuthServiceImpl implements GoogleAuthService {
                 member.setPassword(passwordEncoder.encode("google_oauth_" + System.currentTimeMillis()));
                 member.setIsAdmin(false);
                 member.setMembersActive(true);
-                
+
                 member = memberRepository.save(member);
                 isNewUser = true;
                 log.info("Yeni kullanıcı oluşturuldu: {}", email);
@@ -69,13 +69,13 @@ public class GoogleAuthServiceImpl implements GoogleAuthService {
             String roleName = member.getIsAdmin() ? "ADMIN" : "MEMBER";
             Integer roleId = member.getIsAdmin() ? 1 : 4;
             String scope = member.getIsAdmin() ? "GLOBAL" : "WORKSPACE";
-            
+
             String token = jwtUtil.generateToken(member.getEmail(), roleId, roleName, scope);
-            
+
             log.info("Google OAuth başarılı: {}, Yeni kullanıcı: {}", email, isNewUser);
-            
-            return new GoogleAuthResponse(token, roleId, member.getMemberId(), isNewUser);
-            
+
+            return new GoogleAuthResponse(token, roleId, member.getMemberId(),email, isNewUser);
+
         } catch (Exception e) {
             log.error("Google OAuth sırasında hata: {}", e.getMessage(), e);
             throw new RuntimeException("Google ile giriş yapılamadı: " + e.getMessage());

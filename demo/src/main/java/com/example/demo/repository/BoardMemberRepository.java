@@ -35,7 +35,7 @@ public interface BoardMemberRepository extends JpaRepository<BoardMember, Intege
     Optional<BoardMember> findLeaderByBoard(@Param("boardId") Integer boardId);
 
     @Modifying
-    @Query("UPDATE BoardMember bm SET bm.roleId = 4 WHERE bm.board.boardId = :boardId AND bm.roleId = 3")
+    @Query("UPDATE BoardMember bm SET bm.roleId = 5 WHERE bm.board.boardId = :boardId AND bm.roleId = 3")
     void demotePreviousLeader(@Param("boardId") Integer boardId);
 
     @Modifying
@@ -59,4 +59,4 @@ public interface BoardMemberRepository extends JpaRepository<BoardMember, Intege
 
     @Query("SELECT COUNT(bm) FROM BoardMember bm WHERE bm.board.boardId = :boardId AND bm.roleId = :roleId")
     int countMembersWithRole(@Param("boardId") Integer boardId, @Param("roleId") Integer roleId);
-} 
+}

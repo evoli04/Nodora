@@ -49,13 +49,16 @@ public class BoardController {
     }
 
     // Board'a lider atama
-    @PostMapping("/{boardId}/assign-leader")
-    public ResponseEntity<?> assignLeader(@PathVariable Integer boardId, @RequestParam Integer ownerId, @RequestParam Integer newLeaderMemberId) {
+    @PostMapping("/{boardId}/promote-leader")
+    public ResponseEntity<?> promoteLeader(@PathVariable Integer boardId,
+                                           @RequestParam Integer memberId,
+                                           @RequestParam Integer requesterId) {
         try {
-            boardService.assignLeader(boardId, ownerId, newLeaderMemberId);
+            boardService.promoteLeader(boardId, memberId, requesterId);
             return ResponseEntity.ok("Lider başarıyla atandı.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }
     }
-} 
+
+}

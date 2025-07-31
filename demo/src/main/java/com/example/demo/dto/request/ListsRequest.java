@@ -5,6 +5,7 @@ public class ListsRequest {
     private Integer board_id;
     private Integer position;
 
+
     public ListsRequest() {}
 
     public ListsRequest(String title, Integer board_id, Integer position) {
@@ -35,5 +36,7 @@ public class ListsRequest {
 
     public void setPosition(Integer position) {
         this.position = position;
-}
+    }
+
+
 }

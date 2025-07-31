@@ -30,9 +30,4 @@ public class BoardMemberController {
         return ResponseEntity.ok(boardMemberService.getBoardMembers(boardId));
     }
 
-    @PostMapping("/promote-leader")
-    public ResponseEntity<?> promoteToLeader(@RequestParam Integer boardId, @RequestParam Integer memberId, @RequestParam Integer requesterId) {
-        boardMemberService.promoteToLeader(boardId, memberId, requesterId);
-        return ResponseEntity.ok("Üye lider olarak atandı.");
-    }
-} 
+}

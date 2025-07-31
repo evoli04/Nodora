@@ -33,6 +33,7 @@ public class CardLabelsService {
         entity.setCardId(dto.getCardId());
         entity.setLabelId(dto.getLabelId());
         entity.setMemberId(dto.getMemberId());
+        entity.setCardLabelName(dto.getCardLabelName()); // ✅ yeni alan setlendi
         Card_Labels saved = cardLabelsRepository.save(entity);
         return toResponseDto(saved);
     }
@@ -42,9 +43,7 @@ public class CardLabelsService {
         Optional<Card_Labels> optional = cardLabelsRepository.findById(id);
         if (optional.isPresent()) {
             Card_Labels entity = optional.get();
-            entity.setCardId(dto.getCardId());
-            entity.setLabelId(dto.getLabelId());
-            entity.setMemberId(dto.getMemberId());
+            entity.setCardLabelName(dto.getCardLabelName()); // ✅ yeni alan güncellendi
             Card_Labels updated = cardLabelsRepository.save(entity);
             return toResponseDto(updated);
         }
@@ -67,6 +66,7 @@ public class CardLabelsService {
         dto.setCardId(entity.getCardId());
         dto.setLabelId(entity.getLabelId());
         dto.setMemberId(entity.getMemberId());
+        dto.setCardLabelName(entity.getCardLabelName()); // ✅ response'a da eklendi
         return dto;
- }
+    }
 }

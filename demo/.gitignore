@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Gizli bilgiler - GİT'TE TAKİP EDİLMEYECEK!
+demo/src/main/resources/application.properties
+demo/src/main/resources/gmail-credentials.json
+tokens/StoredCredential
+
